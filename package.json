@@ -1,0 +1,17 @@
+{
+  "name": "online-event-registration-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Online event registration and management system",
+  "engines": {
+    "node": ">=22.23.2 <23"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

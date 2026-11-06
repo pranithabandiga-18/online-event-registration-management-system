@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153e36">
+  <title>Campus Events | Event Registration</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Campus Events home">
+        <span class="brand-mark" aria-hidden="true">CE</span>
+        <span><small>STUDENT LIFE</small><strong>Campus Events</strong></span>
+      </a>
+      <div class="account-bar">
+        <span id="identity" class="identity" hidden></span>
+        <button id="logout" class="button button-outline" type="button" hidden>Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <nav id="navigation" class="navigation" aria-label="Main navigation">
+      <button type="button" data-view="events-view" aria-current="page">Explore events</button>
+      <button id="account-nav" type="button" data-view="account-view">Register / sign in</button>
+      <button id="student-nav" type="button" data-view="student-view" hidden>My registrations</button>
+      <button id="admin-nav" type="button" data-view="admin-view" hidden>Admin dashboard</button>
+    </nav>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <section id="events-view" class="view hero-layout" aria-labelledby="events-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Find your next campus moment</p>
+        <h1 id="events-title">Make room for something memorable.</h1>
+        <p class="lead">Browse student events, workshops, and campus activities. Register in a few clicks and keep your confirmations together.</p>
+        <button id="create-account-cta" class="button" type="button" data-view="account-view">Create a student account</button>
+      </div>
+      <div class="hero-art" aria-hidden="true"><span>✳</span><span>+</span><span>●</span></div>
+      <div class="section-heading event-heading">
+        <div><p class="eyebrow">What's coming up</p><h2>Open events</h2></div>
+        <button id="refresh-events" class="button button-quiet" type="button">Refresh list</button>
+      </div>
+      <div id="event-list" class="event-grid" aria-live="polite"></div>
+      <p id="empty-events" class="empty-state" hidden>No events are open for registration yet. Check back soon.</p>
+    </section>
+
+    <section id="account-view" class="view" hidden aria-labelledby="account-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Your campus account</p><h1 id="account-title">Join in or sign in</h1></div>
+        <p class="muted">Student accounts can register for events and review confirmations.</p>
+      </div>
+      <div class="account-grid">
+        <article class="panel">
+          <p class="eyebrow">New here?</p><h2>Create your student account</h2>
+          <form id="register-form" class="form-stack">
+            <label>Full name<input name="name" autocomplete="name" maxlength="120" required></label>
+            <label>Student email<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+            <label>Password <span class="hint-inline">12 characters minimum</span><input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+            <button class="button" type="submit">Create account</button>
+          </form>
+        </article>
+        <article class="panel panel-soft">
+          <p class="eyebrow">Welcome back</p><h2>Sign in</h2>
+          <form id="login-form" class="form-stack">
+            <label>Email<input name="email" type="email" autocomplete="username" required></label>
+            <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+            <button class="button button-dark" type="submit">Sign in</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="student-view" class="view" hidden aria-labelledby="student-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Your event plans</p><h1 id="student-title">My registrations</h1></div>
+        <button id="refresh-registrations" class="button button-quiet" type="button">Refresh</button>
+      </div>
+      <div id="registration-list" class="event-grid"></div>
+      <p id="empty-registrations" class="empty-state" hidden>You haven't registered for an event yet.</p>
+    </section>
+
+    <section id="confirmation-view" class="view" hidden aria-labelledby="confirmation-title">
+      <article class="confirmation-card">
+        <div class="confirmation-icon" aria-hidden="true">✓</div>
+        <p class="eyebrow">You're on the list</p>
+        <h1 id="confirmation-title">Registration confirmed</h1>
+        <p id="confirmation-message" class="lead"></p>
+        <div id="confirmation-details" class="confirmation-details"></div>
+        <div class="button-row">
+          <button class="button" type="button" data-view="student-view">View my registrations</button>
+          <button class="button button-quiet" type="button" data-view="events-view">Explore more events</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="admin-view" class="view" hidden aria-labelledby="admin-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Event operations</p><h1 id="admin-title">Admin dashboard</h1></div>
+        <button id="refresh-admin" class="button button-quiet" type="button">Refresh dashboard</button>
+      </div>
+      <div id="admin-summary" class="stats-grid"></div>
+      <div class="admin-grid">
+        <article class="panel">
+          <p class="eyebrow">Publish an opportunity</p><h2>Create an event</h2>
+          <form id="event-form" class="form-stack">
+            <label>Event title<input name="title" minlength="3" maxlength="120" required></label>
+            <label>Description<textarea name="description" rows="4" maxlength="2000"></textarea></label>
+            <label>Date and time<input name="startsAt" type="datetime-local" required></label>
+            <label>Location<input name="location" maxlength="150" required></label>
+            <label>Participant capacity<input name="capacity" type="number" min="1" max="10000" step="1" required></label>
+            <button class="button" type="submit">Publish event</button>
+          </form>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Attendance at a glance</p><h2>Events and participants</h2>
+          <div id="admin-event-list" class="admin-event-list"></div>
+          <div id="participant-panel" class="participant-panel" hidden>
+            <div class="section-heading compact"><h3 id="participant-title"></h3><button id="close-participants" class="button button-quiet" type="button">Close</button></div>
+            <div id="participant-list"></div>
+          </div>
+          <p id="empty-admin-events" class="empty-state" hidden>No events have been created yet.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>Campus Events</span><span>Registration details are saved to your account.</span></footer>
+</body>
+</html>

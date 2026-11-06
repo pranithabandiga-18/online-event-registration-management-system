@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: event-registration-bootstrap
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 120
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: bootstrap
+          image: event-registration:local
+          imagePullPolicy: IfNotPresent
+          command: ["node", "scripts/seed.js"]
+          envFrom:
+            - configMapRef:
+                name: event-registration-config
+          env:
+            - name: ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: event-registration-admin
+                  key: username
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: event-registration-admin
+                  key: password
+          volumeMounts:
+            - name: event-data
+              mountPath: /data
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+      volumes:
+        - name: event-data
+          persistentVolumeClaim:
+            claimName: event-registration-data

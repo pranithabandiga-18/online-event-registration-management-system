@@ -1,0 +1,21 @@
+services:
+  event-registration:
+    build: .
+    image: event-registration:local
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3001}:3000"
+    environment:
+      PORT: "3000"
+      DB_PATH: /data/events.sqlite
+      COOKIE_SECURE: "false"
+    volumes:
+      - event-data:/data
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  event-data:
