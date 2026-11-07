@@ -13,6 +13,9 @@ pipeline {
     stage('Install and test') {
       steps { sh 'npm ci'; sh 'npm test' }
     }
+    stage('Selenium browser tests') {
+      steps { sh 'npm run test:selenium' }
+    }
     stage('Build image') {
       steps {
         script {

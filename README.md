@@ -34,15 +34,16 @@ The local SQLite database defaults to `data/events.sqlite`. Set `DB_PATH` to a d
 
 ```powershell
 npm test
+npm run test:selenium
 ```
 
-The Node integration suite covers the seven test cases from the project brief plus the admin participant dashboard, duplicate event registration, and capacity enforcement. See [docs/acceptance.md](docs/acceptance.md).
+The HTTP integration suite covers the registration test cases from the brief, admin participant access, duplicate event registration, and capacity enforcement. The Selenium suite opens headless Chrome and checks the student and administrator workflows using an isolated temporary database. It does not modify the demo database. See [docs/acceptance.md](docs/acceptance.md).
 
 ## Docker, Kubernetes, and Jenkins
 
 - `Dockerfile` builds a non-root image; `compose.yaml` stores SQLite in a named volume and publishes port 3001 by default.
 - `k8s/event-registration.yaml` defines a one-replica `Recreate` Deployment, PVC, health probes, and ClusterIP Service.
 - `k8s/bootstrap-job.yaml` initializes the admin while the Deployment is stopped.
-- `Jenkinsfile` installs dependencies, runs the test suite, builds a commit-tagged image, and can deploy to an explicitly supplied isolated context and namespace.
+- `Jenkinsfile` installs dependencies, runs HTTP and Selenium tests, builds a commit-tagged image, and can deploy to an explicitly supplied isolated context and namespace. The Jenkins Linux agent must have Chrome or Chromium available.
 
 Operational steps and security notes are in [docs/operations.md](docs/operations.md). SQLite is a single-writer demonstration store; keep one app replica and back up the database outside its volume.

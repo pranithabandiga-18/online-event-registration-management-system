@@ -19,4 +19,18 @@ The test identifiers below match the attached project brief. Automated HTTP inte
 
 Admin routes require an administrator role. Student routes require a student role. Email uniqueness is case-insensitive. Event capacity and duplicate registration are checked inside a SQLite write transaction.
 
-The passing results above come from the Node HTTP integration suite. A separate visual browser review has not been recorded.
+The passing results above come from the Node HTTP integration suite.
+
+## Selenium browser cases
+
+Run these checks with `npm run test:selenium`. They use headless Chrome and a fresh temporary SQLite database for each case.
+
+| Test ID | Browser test | Expected result | Status |
+|---|---|---|---|
+| S01 | Open the page and display available events | Page and synthetic event appear | Passed — Selenium / Chrome |
+| S02 | Submit empty fields and an invalid email | Browser rejects the form values | Passed — Selenium / Chrome |
+| S03 | Create a student account and register for an event | Confirmation and registration history appear; student can sign in again | Passed — Selenium / Chrome |
+| S04 | Create a second account using a duplicate email | The page shows a duplicate-email error | Passed — Selenium / Chrome |
+| S05 | Sign in as administrator, create an event, and view participants | Event is published and the participant name/email are shown | Passed — Selenium / Chrome |
+
+These browser tests are separate from TC01–TC12. The Selenium suite passed 5/5 on 2026-11-07 using Windows, Node.js v22.23.2, and Chrome 156.0.8078.80. Backend TC01–TC12 and the browser cases were run separately.

@@ -44,7 +44,11 @@ Every `kubectl` command must include the intended `--context` and `-n` flags. Do
 
 ## Jenkins
 
-The Jenkins pipeline runs `npm ci`, executes the HTTP integration suite, builds an image tagged with the source revision and build number, and optionally applies the Kubernetes manifest when both `TEST_KUBE_CONTEXT` and `TEST_NAMESPACE` are supplied. For kind, set `KIND_NODE` to load the image locally. Use an isolated namespace and dedicated test account; this sample pipeline does not publish to a registry.
+The Jenkins pipeline runs `npm ci`, executes the HTTP integration and Selenium browser suites, builds an image tagged with the source revision and build number, and optionally applies the Kubernetes manifest when both `TEST_KUBE_CONTEXT` and `TEST_NAMESPACE` are supplied. The Linux Jenkins agent needs Chrome or Chromium for Selenium. For kind, set `KIND_NODE` to load the image locally. Use an isolated namespace and dedicated test account; this sample pipeline does not publish to a registry.
+
+## Selenium browser tests
+
+Run `npm ci`, `npm test`, and `npm run test:selenium` from the project folder. The Selenium suite starts the Express app on a temporary local port, creates a new temporary SQLite database for each test, and opens Chrome in headless mode. It does not use or modify the Compose database or a real administrator account. Set `CHROME_BIN` only if Chrome is installed at a non-standard path.
 
 ## Persistence and scaling
 
